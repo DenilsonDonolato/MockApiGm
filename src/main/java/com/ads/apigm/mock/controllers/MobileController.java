@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MobileController {
 
   private final String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTUzNzQ2OTcsImV4cCI6MTYxOTc4MTA5NywiYXVkIjoiZ20tYXBwLWFzc2lzdGVkIiwic3ViIjoiNSJ9.Qb580wbz0oKANoWuu3IH2UiU3bYMW7aIZz_1n3EkYD0";
-  private final Integer id = 1;
+  private final Long id = 1L;
   private final String name = "Maria da Penha";
+  private final Long measureId = 5L;
   //State simula o atendimento do chamado!
   private int state = 1;
   
@@ -28,7 +29,7 @@ public class MobileController {
     
     if (login.getUsername() != null && login.getPassword() != null) {
       System.out.println("username: "+login.getUsername()+"\npassword: "+login.getPassword());
-      LoginResponse response = new LoginResponse(token, id, name);
+      LoginResponse response = new LoginResponse(token, id, name, measureId);
           System.out.println("sending response");
 			return ResponseEntity.ok(response);
 		}
@@ -54,19 +55,19 @@ public class MobileController {
   @GetMapping(value = "mobile/actuation/{id}")
   public ResponseEntity<Object> getActuation(
   @RequestHeader(name = "Authorization") String token,
-  @PathVariable String id) {
+  @PathVariable(name = "id") Long measureId) {
     
     if (!token.equals(this.token)) {
       System.out.println("Unauthorized");
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
-    if (!this.id.toString().equals(id)) {
+    if (!this.measureId.equals(measureId)) {
       System.out.println("Not Found");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found");
     }
 
-    Actuation actuation = new Actuation("42", String.valueOf(state));
+    Actuation actuation = new Actuation(measureId.toString(), String.valueOf(state));
     state = state%3 + 1;
     return ResponseEntity.ok().body(actuation);
   }

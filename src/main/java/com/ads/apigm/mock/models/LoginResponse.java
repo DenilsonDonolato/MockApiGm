@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class LoginResponse {
   private final String token;
-  private final long id;
+  private final Long id;
   private final String name;
-
+  private final Long measureId;
 }
