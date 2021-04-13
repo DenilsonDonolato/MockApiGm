@@ -24,7 +24,7 @@ public class MobileController {
   private final Long id = 1L;
   private final String name = "Maria da Penha";
   private final Long measureId = 5L;
-  private final String measureValidity = String.valueOf(Instant.now().plus(5L, ChronoUnit.MINUTES).toEpochMilli());
+  private final String measureValidity = String.valueOf(Instant.now().minus(3L, ChronoUnit.HOURS).plus(5L, ChronoUnit.MINUTES).toEpochMilli());
   //State simula o atendimento do chamado!
   private int state = 1;
   
