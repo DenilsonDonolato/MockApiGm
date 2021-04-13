@@ -1,5 +1,8 @@
 package com.ads.apigm.mock.controllers;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import com.ads.apigm.mock.models.Actuation;
 import com.ads.apigm.mock.models.Localization;
 import com.ads.apigm.mock.models.Login;
@@ -21,16 +24,23 @@ public class MobileController {
   private final Long id = 1L;
   private final String name = "Maria da Penha";
   private final Long measureId = 5L;
+  private final String measureValidity = String.valueOf(Instant.now().plus(5L, ChronoUnit.MINUTES).toEpochMilli());
   //State simula o atendimento do chamado!
   private int state = 1;
   
   @PostMapping(value = "/mobile/login")
-	public ResponseEntity<LoginResponse> userLogin(@RequestBody Login login) {
+	public ResponseEntity<Object> userLogin(@RequestBody Login login) {
     
     if (login.getUsername() != null && login.getPassword() != null) {
       System.out.println("username: "+login.getUsername()+"\npassword: "+login.getPassword());
-      LoginResponse response = new LoginResponse(token, id, name, measureId);
-          System.out.println("sending response");
+      LoginResponse response = new LoginResponse(token, id, name, measureId, measureValidity);
+      System.out.println("sending response");
+
+      if(Instant.now().isAfter(Instant.ofEpochMilli(Long.valueOf(measureValidity)))) {
+        String body = "{ \"error\":\"medida expirada\" }";
+        return ResponseEntity.status(401).body(body);
+      }
+      
 			return ResponseEntity.ok(response);
 		}
 

@@ -10,4 +10,5 @@ public class LoginResponse {
   private final Long id;
   private final String name;
   private final Long measureId;
+  private String measureValidity;
 }
