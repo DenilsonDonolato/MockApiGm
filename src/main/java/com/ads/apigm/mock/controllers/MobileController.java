@@ -36,7 +36,7 @@ public class MobileController {
       LoginResponse response = new LoginResponse(token, id, name, measureId, measureValidity);
       System.out.println("sending response");
 
-      if(Instant.now().isAfter(Instant.ofEpochMilli(Long.valueOf(measureValidity)))) {
+      if(Instant.now().minus(3L, ChronoUnit.HOURS).isAfter(Instant.ofEpochMilli(Long.valueOf(measureValidity)))) {
         String body = "{ \"error\":\"medida expirada\" }";
         return ResponseEntity.status(401).body(body);
       }
