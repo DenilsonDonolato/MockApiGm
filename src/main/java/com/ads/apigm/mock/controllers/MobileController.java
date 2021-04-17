@@ -24,7 +24,7 @@ public class MobileController {
   private final Long id = 1L;
   private final String name = "Maria da Penha";
   private final Long measureId = 5L;
-  private final String measureValidity = String.valueOf(Instant.now().minus(3L, ChronoUnit.HOURS).plus(5L, ChronoUnit.MINUTES).toEpochMilli());
+  private String measureValidity;
   //State simula o atendimento do chamado!
   private int state = 1;
   
@@ -32,6 +32,7 @@ public class MobileController {
 	public ResponseEntity<Object> userLogin(@RequestBody Login login) {
     
     if (login.getUsername() != null && login.getPassword() != null) {
+      measureValidity = String.valueOf(Instant.now().minus(3L, ChronoUnit.HOURS).plus(5L, ChronoUnit.MINUTES).toEpochMilli());
       System.out.println("username: "+login.getUsername()+"\npassword: "+login.getPassword());
       LoginResponse response = new LoginResponse(token, id, name, measureId, measureValidity);
       System.out.println("sending response");
